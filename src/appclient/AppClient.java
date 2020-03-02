@@ -26,6 +26,7 @@ public class AppClient extends Application {
         stage.setScene(scene);
         stage.setTitle("Client");
         stage.show();
+        //client
     }
 
     /**
