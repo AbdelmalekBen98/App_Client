@@ -6,8 +6,12 @@
 package appclient;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -31,40 +35,61 @@ public class AppClientController implements Initializable {
     @FXML
     private Button BtnSend;
     @FXML
-    private TextField msg;
+    TextField msg;
     @FXML
-            private TextArea zone;
-    Client client;
-    BufferedReader in ;
-        String message;
-        PrintWriter out;
+    TextArea zone;
+   
+    Socket socket;
+     InputStreamReader in;
+    PrintWriter out;
+    BufferedReader  bf,str;
+	/*DataInputStream in ;
+       
+        DataOutputStream out;*/
+    
+        
+       
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        client=new Client("127.0.0.1", 2000);
+         try {
+			socket =new Socket("127.0.0.1",2200);
+			 
+               
+                in = new InputStreamReader(socket.getInputStream());
+                bf=new BufferedReader(in);
+                out = new PrintWriter(socket.getOutputStream(),true);
+                System.out.println("Client Connected");
+               
+               
+                str=new BufferedReader(new InputStreamReader(System.in));
+                
+              
+                     String userInput;
+                      while ((userInput = str.readLine()) != null) {
+                          out.println(userInput);
+                          System.out.println("echo: " + bf.readLine());
+                      }
+                                                  
+    
+                        
         // TODO
         BtnSend.setOnAction((event) -> {
             try {
-                
-                  String text = msg.getText();
-      out.println(text);
-      msg.setText(new String(""));
-      out.println(text);
+                String Msg="";
+                Msg=msg.getText();
+                out.println(Msg);
+                 
    }catch(Exception e)
    {e.printStackTrace();}
 //Receive text from server
-   try{
-     String line = in.readLine();
-     System.out.println("Text received: " + line);
-   } catch (IOException e){
-     System.out.println("Read failed");
-     System.exit(1);
-   }
-                
+  
                 
                // client.message=client.in.readLine();
            
                 
     });    
     
-}
-}
+}       catch (IOException ex) {
+            Logger.getLogger(AppClientController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}}

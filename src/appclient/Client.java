@@ -14,9 +14,9 @@ import java.io.*;
 
 public class Client {
 	Socket socket;
-	BufferedReader in ;
-        String message;
-        PrintWriter out;
+	DataInputStream in ;
+       
+        DataOutputStream out;
 	/*
         public Client(String adresse, int port)
 	{
@@ -36,13 +36,18 @@ public class Client {
         {
             try {
 			socket =new Socket(adresse,port);
-			in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			in=new DataInputStream(socket.getInputStream());
 			
-			message=in.readLine();
-                        out = new PrintWriter(socket.getOutputStream(),true); 
-                                                                            
+			
+                        out = new DataOutputStream(socket.getOutputStream()); 
+                              String message="";                                               
     
-                        System.out.println(message);
+                        while (true) 
+                        {
+                            message=in.readUTF();
+                            System.out.println("sev :  "+message);
+                                
+                        }
 			//socket.close();
 		}
 		catch(IOException e)
